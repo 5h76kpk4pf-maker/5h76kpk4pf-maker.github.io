@@ -6,16 +6,47 @@
 <body>
 
   <h2>إنشاء حساب</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <br><br>
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
   <button onclick="signUp()">Sign Up</button>
 
   <h2>تسجيل دخول</h2>
   <button onclick="login()">Login</button>
 
   <script type="module">
-    // هون رح نحط كود Firebase بعد شوي
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS",
+      authDomain: "my-login-app-c657b.firebaseapp.com",
+      projectId: "my-login-app-c657b",
+      storageBucket: "my-login-app-c657b.appspot.com",
+      messagingSenderId: "212822743589",
+      appId: "1:212822743589:web:b3417be"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.signUp = function() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => alert("تم إنشاء الحساب 🔥"))
+        .catch(error => alert(error.message));
+    }
+
+    window.login = function() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => alert("تم تسجيل الدخول 🔥"))
+        .catch(error => alert(error.message));
+    }
   </script>
 
 </body>
