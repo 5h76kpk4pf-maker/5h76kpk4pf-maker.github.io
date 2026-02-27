@@ -1,52 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Auth System</title>
+
+<style>
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+  }
+
+  .card{
+    background:white;
+    padding:30px;
+    width:350px;
+    border-radius:15px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+    text-align:center;
+  }
+
+  h2{ margin-bottom:20px; }
+
+  input{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:14px;
+  }
+
+  button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s;
+  }
+
+  .signup{ background:#667eea; color:white; }
+  .login{ background:#764ba2; color:white; }
+  .logout{ background:#e74c3c; color:white; }
+
+  button:hover{ opacity:0.9; }
+
+  .message{
+    margin-top:15px;
+    font-size:14px;
+  }
+
+  .hidden{ display:none; }
+</style>
 </head>
 <body>
 
-  <h2>إنشاء حساب</h2>
-  <input type="email" id="email" placeholder="Email"><br><br>
-  <input type="password" id="password" placeholder="Password"><br><br>
+<div class="card">
 
-  <button id="signup">Sign Up</button>
-  <button id="login">Login</button>
+  <div id="authBox">
+    <h2>إنشاء حساب / تسجيل دخول</h2>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
-      authDomain: "my-login-app-c657b.firebaseapp.com",
-      projectId: "my-login-app-c657b",
-      storageBucket: "my-login-app-c657b.firebasestorage.app",
-      messagingSenderId: "212822743589",
-      appId: "1:212822743589:web:b3417be9f21f7287c9fdcc"
-    };
+    <button class="signup" id="signup">إنشاء حساب</button>
+    <button class="login" id="login">تسجيل دخول</button>
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    <p class="message" id="message"></p>
+  </div>
 
-    document.getElementById("signup").onclick = function() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+  <div id="dashboard" class="hidden">
+    <h2>مرحباً 👋</h2>
+    <p id="userEmail"></p>
+    <button class="logout" id="logout">تسجيل خروج</button>
+  </div>
 
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(() => alert("تم إنشاء الحساب 🔥"))
-        .catch(e => alert(e.message));
-    };
+</div>
 
-    document.getElementById("login").onclick = function() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+<script type="module">
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => alert("تم تسجيل الدخول 🔥"))
-        .catch(e => alert(e.message));
-    };
-  </script>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "my-login-app-c657b.firebaseapp.com",
+  projectId: "my-login-app-c657b",
+  storageBucket: "my-login-app-c657b.firebasestorage.app",
+  messagingSenderId: "212822743589",
+  appId: "1:212822743589:web:b3417be9f21f7287c9fdcc"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const message = document.getElementById("message");
+
+function showMessage(text,color="green"){
+  message.style.color = color;
+  message.innerText = text;
+}
+
+// تحقق من الإدخال
+function validate(email,password){
+  if(!email.includes("@")){
+    showMessage("بريد إلكتروني غير صالح","red");
+    return false;
+  }
+  if(password.length < 6){
+    showMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل","red");
+    return false;
+  }
+  return true;
+}
+
+// إنشاء حساب
+document.getElementById("signup").onclick = async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if(!validate(email,password)) return;
+
+  try{
+    await createUserWithEmailAndPassword(auth,email,password);
+    showMessage("تم إنشاء الحساب بنجاح 🔥");
+  }catch(error){
+    showMessage(error.message,"red");
+  }
+};
+
+// تسجيل دخول
+document.getElementById("login").onclick = async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if(!validate(email,password)) return;
+
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+    showMessage("تم تسجيل الدخول 🔥");
+  }catch(error){
+    showMessage("بيانات غير صحيحة","red");
+  }
+};
+
+// تسجيل خروج
+document.getElementById("logout").onclick = async () => {
+  await signOut(auth);
+};
+
+// حماية الصفحة
+onAuthStateChanged(auth, (user)=>{
+  if(user){
+    document.getElementById("authBox").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    document.getElementById("userEmail").innerText = user.email;
+  }else{
+    document.getElementById("authBox").classList.remove("hidden");
+    document.getElementById("dashboard").classList.add("hidden");
+  }
+});
+
+</script>
 </body>
 </html>
