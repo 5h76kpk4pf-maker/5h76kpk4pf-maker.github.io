@@ -67,8 +67,8 @@
 
     .message {
       margin-top: 15px;
-      color: #ff7675;
       font-size: 14px;
+      min-height: 20px;
     }
   </style>
 </head>
@@ -80,8 +80,8 @@
     <input type="email" id="email" placeholder="البريد الإلكتروني">
     <input type="password" id="password" placeholder="كلمة المرور">
 
-    <button class="login-btn" onclick="login()">دخول فوري</button>
-    <button class="register-btn" onclick="register()">إنشاء حساب جديد</button>
+    <button class="login-btn" onclick="login()">دخول</button>
+    <button class="register-btn" onclick="register()">إنشاء حساب</button>
 
     <div class="message" id="message"></div>
   </div>
@@ -102,30 +102,62 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const messageBox = document.getElementById("message");
 
     function register() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
       auth.createUserWithEmailAndPassword(email, password)
         .then(() => {
-          document.getElementById("message").innerText = "تم إنشاء الحساب بنجاح ✅";
+          messageBox.style.color = "lightgreen";
+          messageBox.innerText = "تم إنشاء الحساب بنجاح ✅";
         })
         .catch(error => {
-          document.getElementById("message").innerText = error.message;
+          messageBox.style.color = "#ff7675";
+
+          if (error.code === "auth/email-already-in-use") {
+            messageBox.innerText = "❌ البريد مستخدم مسبقًا";
+
+          } else if (error.code === "auth/weak-password") {
+            messageBox.innerText = "❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل";
+
+          } else if (error.code === "auth/invalid-email") {
+            messageBox.innerText = "❌ صيغة البريد غير صحيحة";
+
+          } else {
+            messageBox.innerText = "❌ حدث خطأ أثناء إنشاء الحساب";
+          }
         });
     }
 
     function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
       auth.signInWithEmailAndPassword(email, password)
         .then(() => {
-          document.getElementById("message").innerText = "تم تسجيل الدخول ✅";
+          messageBox.style.color = "lightgreen";
+          messageBox.innerText = "تم تسجيل الدخول بنجاح ✅";
         })
         .catch(error => {
-          document.getElementById("message").innerText = error.message;
+          messageBox.style.color = "#ff7675";
+
+          if (error.code === "auth/user-not-found") {
+            messageBox.innerText = "❌ البريد غير مسجل";
+
+          } else if (error.code === "auth/wrong-password") {
+            messageBox.innerText = "❌ كلمة المرور غير صحيحة";
+
+          } else if (error.code === "auth/invalid-credential") {
+            messageBox.innerText = "❌ بيانات الدخول غير صحيحة";
+
+          } else if (error.code === "auth/invalid-email") {
+            messageBox.innerText = "❌ صيغة البريد غير صحيحة";
+
+          } else {
+            messageBox.innerText = "❌ حدث خطأ، حاول مرة أخرى";
+          }
         });
     }
   </script>
