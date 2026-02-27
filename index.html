@@ -1,27 +1,21 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>تسجيل الدخول</title>
-
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { 
   getAuth, 
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "PUT_YOUR_API_KEY_HERE",
-  authDomain: "PUT_YOUR_AUTH_DOMAIN_HERE",
-  projectId: "PUT_YOUR_PROJECT_ID_HERE",
-  storageBucket: "PUT_YOUR_STORAGE_BUCKET_HERE",
-  messagingSenderId: "PUT_YOUR_MESSAGING_SENDER_ID_HERE",
-  appId: "PUT_YOUR_APP_ID_HERE"
+  apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
+  authDomain: "my-login-app-c657b.firebaseapp.com",
+  projectId: "my-login-app-c657b",
+  storageBucket: "my-login-app-c657b.firebasestorage.app",
+  messagingSenderId: "212822743589",
+  appId: "1:212822743589:web:b9dbdbcf82a9c05fc9fdcc"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -36,7 +30,6 @@ onAuthStateChanged(auth, (user) => {
 window.login = async function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
   await signInWithEmailAndPassword(auth, email, password);
   window.location.href = "dashboard.html";
 };
@@ -44,32 +37,14 @@ window.login = async function () {
 window.register = async function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
   await createUserWithEmailAndPassword(auth, email, password);
   window.location.href = "dashboard.html";
 };
 
 window.resetPassword = async function () {
   const email = document.getElementById("email").value;
-
   await sendPasswordResetEmail(auth, email);
-  alert("تم إرسال رابط إعادة التعيين");
+  alert("تم إرسال رابط إعادة تعيين كلمة المرور");
 };
 
 </script>
-</head>
-
-<body style="text-align:center; font-family:Arial; direction:rtl">
-
-<h2>تسجيل الدخول</h2>
-
-<input id="email" type="email" placeholder="الإيميل"><br><br>
-<input id="password" type="password" placeholder="كلمة المرور"><br><br>
-
-<button onclick="login()">دخول</button>
-<button onclick="register()">إنشاء حساب</button>
-<br><br>
-<button onclick="resetPassword()">نسيت كلمة المرور؟</button>
-
-</body>
-</html>
