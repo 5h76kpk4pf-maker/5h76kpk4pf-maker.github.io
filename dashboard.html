@@ -4,29 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f2f2f2;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+
+.box{
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  width:90%;
+  max-width:400px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  border:none;
+  border-radius:6px;
+  background:#e53935;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
+}
+</style>
 </head>
 
-<body style="text-align:center; font-family:Arial; direction:rtl">
+<body>
 
-<h2>لوحة التحكم</h2>
-
-<p id="welcome"></p>
-
-<button id="logoutBtn">تسجيل الخروج</button>
+<div class="box">
+  <h2>لوحة التحكم </h2>
+  <p id="userEmail">جاري التحميل...</p>
+  <button id="logout">تسجيل خروج</button>
+</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { 
   getAuth, 
   onAuthStateChanged,
   signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
   authDomain: "my-login-app-c657b.firebaseapp.com",
   projectId: "my-login-app-c657b",
-  storageBucket: "my-login-app-c657b.appspot.com",
+  storageBucket: "my-login-app-c657b.firebasestorage.app",
   messagingSenderId: "212822743589",
   appId: "1:212822743589:web:b9dbdbcf82a9c05fc9fdcc"
 };
@@ -34,19 +67,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+const userEmail = document.getElementById("userEmail");
+const logoutBtn = document.getElementById("logout");
+
 onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "index.html";
+  if (user) {
+    userEmail.innerText = "أهلاً: " + user.email;
   } else {
-    document.getElementById("welcome").innerText =
-      "مرحباً " + user.email;
+    window.location.href = "index.html";
   }
 });
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
+logoutBtn.onclick = async () => {
   await signOut(auth);
   window.location.href = "index.html";
-});
+};
 </script>
 
 </body>
