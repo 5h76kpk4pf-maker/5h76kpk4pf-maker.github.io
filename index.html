@@ -1,3 +1,19 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول</title>
+</head>
+<body>
+
+<h2>تسجيل الدخول</h2>
+
+<input type="email" id="email" placeholder="البريد الإلكتروني"><br><br>
+<input type="password" id="password" placeholder="كلمة المرور"><br><br>
+
+<button id="register">إنشاء حساب</button>
+<button id="login">تسجيل دخول</button>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
@@ -45,6 +61,10 @@ loginBtn.addEventListener("click", async () => {
     emailInput.value,
     passwordInput.value
   );
+
   window.location.href = "dashboard.html";
 });
 </script>
+
+</body>
+</html>
