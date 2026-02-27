@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Login App</title>
+  <title>Login</title>
 </head>
 <body>
 
@@ -10,14 +10,13 @@
   <input type="email" id="email" placeholder="Email"><br><br>
   <input type="password" id="password" placeholder="Password"><br><br>
 
-  <button onclick="signUp()">Sign Up</button>
-  <button onclick="login()">Login</button>
+  <button id="signup">Sign Up</button>
+  <button id="login">Login</button>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
       authDomain: "my-login-app-c657b.firebaseapp.com",
@@ -27,26 +26,26 @@
       appId: "1:212822743589:web:b3417be9f21f7287c9fdcc"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    window.signUp = function() {
+    document.getElementById("signup").onclick = function() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      createUserWithEmailAndPassword(auth, email, password)
+      auth.createUserWithEmailAndPassword(email, password)
         .then(() => alert("تم إنشاء الحساب 🔥"))
-        .catch(error => alert(error.message));
-    }
+        .catch(e => alert(e.message));
+    };
 
-    window.login = function() {
+    document.getElementById("login").onclick = function() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      signInWithEmailAndPassword(auth, email, password)
+      auth.signInWithEmailAndPassword(email, password)
         .then(() => alert("تم تسجيل الدخول 🔥"))
-        .catch(error => alert(error.message));
-    }
+        .catch(e => alert(e.message));
+    };
   </script>
 
 </body>
