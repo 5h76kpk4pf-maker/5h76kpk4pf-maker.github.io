@@ -1,190 +1,178 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام تسجيل</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصتي الذكية | تسجيل الدخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
 
-.card{
-  background:white;
-  width:350px;
-  padding:30px;
-  border-radius:15px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.2);
-  text-align:center;
-}
+        body {
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
 
-input{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
+        /* تأثيرات الخلفية المتحركة */
+        .circles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.2;
+        }
 
-button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:15px;
-}
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
 
-.signup{background:#667eea;color:white;}
-.login{background:#764ba2;color:white;}
-.logout{background:#e74c3c;color:white;}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.message{
-  margin-top:15px;
-  font-size:14px;
-}
+        h2 { margin-bottom: 10px; font-weight: 700; font-size: 1.8rem; }
+        p { color: #94a3b8; margin-bottom: 30px; font-size: 0.9rem; }
 
-.hidden{display:none;}
-</style>
+        .input-group { margin-bottom: 20px; text-align: right; }
+        label { display: block; margin-bottom: 8px; color: #cbd5e1; font-size: 0.85rem; }
+        
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-outline:hover { background: rgba(255, 255, 255, 0.05); }
+
+        #error-msg { color: #f87171; font-size: 0.8rem; margin-top: 10px; min-height: 20px; }
+    </style>
 </head>
 <body>
 
-<div class="card">
+    <div class="circles">
+        <div class="circle" style="width: 300px; height: 300px; top: -50px; left: -50px;"></div>
+        <div class="circle" style="width: 250px; height: 250px; bottom: -50px; right: -50px; background: var(--secondary);"></div>
+    </div>
 
-<div id="authBox">
-<h2>إنشاء حساب / تسجيل دخول</h2>
+    <div class="card">
+        <h2>أهلاً بك مجدداً</h2>
+        <p>قم بتسجيل الدخول للوصول إلى لوحة التحكم</p>
+        
+        <div class="input-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="email" placeholder="example@mail.com">
+        </div>
 
-<input type="email" id="email" placeholder="البريد الإلكتروني">
-<input type="password" id="password" placeholder="كلمة المرور">
+        <div class="input-group">
+            <label>كلمة المرور</label>
+            <input type="password" id="password" placeholder="••••••••">
+        </div>
 
-<button class="signup" id="signup">إنشاء حساب</button>
-<button class="login" id="login">تسجيل دخول</button>
+        <button class="btn btn-primary" onclick="handleAuth('login')">تسجيل الدخول</button>
+        <button class="btn btn-outline" onclick="handleAuth('signup')">إنشاء حساب جديد</button>
 
-<p class="message" id="message"></p>
-</div>
+        <div id="error-msg"></div>
+    </div>
 
-<div id="dashboard" class="hidden">
-<h2>مرحباً 👋</h2>
-<p id="userEmail"></p>
-<button class="logout" id="logout">تسجيل خروج</button>
-</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-</div>
+        // ضع إعداداتك هنا بدقة
+        const firebaseConfig = {
+            apiKey: "ضع_مفتاحك_هنا",
+            authDomain: "5h76kpk4pf-maker.firebaseapp.com",
+            projectId: "5h76kpk4pf-maker",
+            storageBucket: "5h76kpk4pf-maker.appspot.com",
+            messagingSenderId: "XXXXXXXXXXXX",
+            appId: "XXXXXXXXXXXX"
+        };
 
-<script type="module">
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        window.handleAuth = async (type) => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-msg');
+            
+            errorDiv.innerText = "جاري المعالجة...";
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "my-login-app-c657b.firebaseapp.com",
-  projectId: "my-login-app-c657b",
-  storageBucket: "my-login-app-c657b.firebasestorage.app",
-  messagingSenderId: "212822743589",
-  appId: "1:212822743589:web:b3417be9f21f7287c9fdcc"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const message = document.getElementById("message");
-
-function showMessage(text,color="green"){
-  message.style.color = color;
-  message.innerText = text;
-}
-
-function validate(email,password){
-  if(!email.includes("@")){
-    showMessage("البريد الإلكتروني غير صالح ❌","red");
-    return false;
-  }
-  if(password.length < 6){
-    showMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل 🔐","red");
-    return false;
-  }
-  return true;
-}
-
-function translateError(error){
-  switch(error.code){
-    case "auth/weak-password":
-      return "كلمة المرور ضعيفة جداً";
-    case "auth/email-already-in-use":
-      return "هذا البريد مستخدم بالفعل 📧";
-    case "auth/invalid-email":
-      return "البريد الإلكتروني غير صالح ❌";
-    case "auth/user-not-found":
-      return "لا يوجد حساب بهذا البريد";
-    case "auth/wrong-password":
-      return "كلمة المرور غير صحيحة";
-    case "auth/invalid-credential":
-      return "بيانات الدخول غير صحيحة";
-    default:
-      return "حدث خطأ غير متوقع";
-  }
-}
-
-document.getElementById("signup").onclick = async () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-
-  if(!validate(email,password)) return;
-
-  try{
-    await createUserWithEmailAndPassword(auth,email,password);
-    showMessage("تم إنشاء الحساب بنجاح 🔥");
-  }catch(error){
-    showMessage(translateError(error),"red");
-  }
-};
-
-document.getElementById("login").onclick = async () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-
-  if(!validate(email,password)) return;
-
-  try{
-    await signInWithEmailAndPassword(auth,email,password);
-    showMessage("تم تسجيل الدخول 🔥");
-  }catch(error){
-    showMessage(translateError(error),"red");
-  }
-};
-
-document.getElementById("logout").onclick = async () => {
-  await signOut(auth);
-};
-
-onAuthStateChanged(auth, (user)=>{
-  if(user){
-    document.getElementById("authBox").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    document.getElementById("userEmail").innerText = user.email;
-  }else{
-    document.getElementById("authBox").classList.remove("hidden");
-    document.getElementById("dashboard").classList.add("hidden");
-  }
-});
-
-</script>
+            try {
+                if(type === 'login') {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    alert("تم الدخول بنجاح!");
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    alert("تم إنشاء الحساب!");
+                }
+            } catch (error) {
+                errorDiv.innerText = "خطأ: " + error.message;
+            }
+        }
+    </script>
 </body>
 </html>
