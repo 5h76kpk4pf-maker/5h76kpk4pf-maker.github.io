@@ -19,21 +19,20 @@
 <button id="resetBtn">نسيت كلمة المرور؟</button>
 
 <script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
   getAuth, 
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
   authDomain: "my-login-app-c657b.firebaseapp.com",
   projectId: "my-login-app-c657b",
-  storageBucket: "my-login-app-c657b.firebasestorage.app",
+  storageBucket: "my-login-app-c657b.appspot.com",
   messagingSenderId: "212822743589",
   appId: "1:212822743589:web:b9dbdbcf82a9c05fc9fdcc"
 };
@@ -48,25 +47,36 @@ onAuthStateChanged(auth, (user) => {
 });
 
 document.getElementById("loginBtn").addEventListener("click", async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  await signInWithEmailAndPassword(auth, email, password);
-  window.location.href = "dashboard.html";
+  try {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert(error.message);
+  }
 });
 
 document.getElementById("registerBtn").addEventListener("click", async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  await createUserWithEmailAndPassword(auth, email, password);
-  window.location.href = "dashboard.html";
+  try {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    await createUserWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert(error.message);
+  }
 });
 
 document.getElementById("resetBtn").addEventListener("click", async () => {
-  const email = document.getElementById("email").value;
-  await sendPasswordResetEmail(auth, email);
-  alert("تم إرسال رابط إعادة تعيين كلمة المرور");
+  try {
+    const email = document.getElementById("email").value;
+    await sendPasswordResetEmail(auth, email);
+    alert("تم إرسال رابط إعادة تعيين كلمة المرور");
+  } catch (error) {
+    alert(error.message);
+  }
 });
-
 </script>
 
 </body>
