@@ -2,95 +2,52 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم</title>
+</head>
+
+<body style="text-align:center; font-family:Arial; direction:rtl">
+
+<h2>لوحة التحكم</h2>
+
+<p id="welcome"></p>
+
+<button id="logoutBtn">تسجيل الخروج</button>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
   getAuth, 
-  onAuthStateChanged, 
-  signOut 
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { 
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 const firebaseConfig = {
-  apiKey: "PUT_YOUR_API_KEY_HERE",
-  authDomain: "PUT_YOUR_AUTH_DOMAIN_HERE",
-  projectId: "PUT_YOUR_PROJECT_ID_HERE",
-  storageBucket: "PUT_YOUR_STORAGE_BUCKET_HERE",
-  messagingSenderId: "PUT_YOUR_MESSAGING_SENDER_ID_HERE",
-  appId: "PUT_YOUR_APP_ID_HERE"
+  apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
+  authDomain: "my-login-app-c657b.firebaseapp.com",
+  projectId: "my-login-app-c657b",
+  storageBucket: "my-login-app-c657b.appspot.com",
+  messagingSenderId: "212822743589",
+  appId: "1:212822743589:web:b9dbdbcf82a9c05fc9fdcc"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "index.html";
   } else {
-    document.getElementById("email").innerText = user.email;
-    loadNotes();
+    document.getElementById("welcome").innerText =
+      "مرحباً " + user.email;
   }
 });
 
-window.logout = async function () {
+document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
   window.location.href = "index.html";
-};
-
-window.addNote = async function () {
-  const text = document.getElementById("noteInput").value;
-  if (!text) return;
-
-  await addDoc(collection(db, "notes"), {
-    text: text,
-    email: auth.currentUser.email
-  });
-
-  document.getElementById("noteInput").value = "";
-  loadNotes();
-};
-
-async function loadNotes() {
-  const querySnapshot = await getDocs(collection(db, "notes"));
-  const list = document.getElementById("notesList");
-  list.innerHTML = "";
-
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    if (data.email === auth.currentUser.email) {
-      list.innerHTML += `<li>${data.text}</li>`;
-    }
-  });
-}
-
+});
 </script>
-</head>
-
-<body style="text-align:center; font-family:Arial; direction:rtl">
-
-<h2>🚀 لوحة التحكم</h2>
-<p>مرحباً بك: <span id="email"></span></p>
-
-<br>
-
-<input id="noteInput" placeholder="اكتب ملاحظة">
-<button onclick="addNote()">حفظ</button>
-
-<h3>ملاحظاتي:</h3>
-<ul id="notesList"></ul>
-
-<br><br>
-<button onclick="logout()">تسجيل خروج</button>
 
 </body>
 </html>
