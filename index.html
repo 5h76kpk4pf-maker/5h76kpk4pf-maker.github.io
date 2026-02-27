@@ -2,57 +2,79 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تسجيل الدخول</title>
 
 <style>
-body {
+body{
   font-family: Arial;
-  text-align: center;
-  margin-top: 50px;
+  background:#f2f2f2;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
 }
 
-input {
-  padding: 10px;
-  margin: 5px;
+.container{
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  width:90%;
+  max-width:350px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-button {
-  padding: 10px 20px;
-  margin: 5px;
+input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
 }
 
-a {
-  display: block;
-  margin-top: 10px;
-  cursor: pointer;
-  color: blue;
+button{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-.error {
-  color: red;
-  margin-top: 10px;
+#register{ background:#4CAF50; color:white; }
+#login{ background:#2196F3; color:white; }
+
+#forgotPassword{
+  margin-top:12px;
+  display:block;
+  color:#0066ff;
+  cursor:pointer;
+  font-size:14px;
 }
 
-.success {
-  color: green;
-  margin-top: 10px;
-}
+.error{ color:red; margin-top:10px; }
+.success{ color:green; margin-top:10px; }
 </style>
 </head>
 
 <body>
 
+<div class="container">
 <h2>تسجيل الدخول</h2>
 
-<input type="email" id="email" placeholder="ادخل Gmail"><br>
-<input type="password" id="password" placeholder="ادخل كلمة المرور"><br>
+<input type="email" id="email" placeholder="ادخل Gmail">
+<input type="password" id="password" placeholder="ادخل كلمة المرور">
 
 <button id="register">إنشاء حساب</button>
 <button id="login">تسجيل دخول</button>
 
-<a id="forgotPassword">نسيت كلمة المرور؟</a>
+<span id="forgotPassword">نسيت كلمة المرور؟</span>
 
 <div id="message"></div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
@@ -75,12 +97,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-function isValidGmail(email) {
-  return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const registerBtn = document.getElementById("register");
@@ -88,76 +104,73 @@ const loginBtn = document.getElementById("login");
 const forgotBtn = document.getElementById("forgotPassword");
 const messageDiv = document.getElementById("message");
 
-function showError(msg) {
-  messageDiv.className = "error";
-  messageDiv.innerText = msg;
+function showError(msg){
+  messageDiv.className="error";
+  messageDiv.innerText=msg;
 }
 
-function showSuccess(msg) {
-  messageDiv.className = "success";
-  messageDiv.innerText = msg;
+function showSuccess(msg){
+  messageDiv.className="success";
+  messageDiv.innerText=msg;
 }
 
-registerBtn.addEventListener("click", async () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-  messageDiv.innerText = "";
+function validGmail(email){
+  return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
+}
 
-  if (!isValidGmail(email)) {
-    showError("يجب إدخال Gmail صحيح");
+registerBtn.onclick = async () => {
+  const email=emailInput.value.trim();
+  const password=passwordInput.value.trim();
+  messageDiv.innerText="";
+
+  if(!validGmail(email)){
+    showError("يجب إدخال Gmail صحيح ينتهي بـ @gmail.com");
     return;
   }
 
-  if (password.length < 6) {
+  if(password.length<6){
     showError("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
     return;
   }
 
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
+  try{
+    await createUserWithEmailAndPassword(auth,email,password);
     showSuccess("تم إنشاء الحساب بنجاح");
-  } catch (error) {
-    if (error.code === "auth/email-already-in-use") {
+  }catch(error){
+    if(error.code==="auth/email-already-in-use"){
       showError("البريد مستخدم مسبقاً");
-    } else {
-      showError(error.message);
+    }else{
+      showError("حدث خطأ أثناء التسجيل");
     }
   }
-});
+};
 
-loginBtn.addEventListener("click", async () => {
-  messageDiv.innerText = "";
-
-  try {
-    await signInWithEmailAndPassword(
-      auth,
-      emailInput.value,
-      passwordInput.value
-    );
+loginBtn.onclick = async () => {
+  messageDiv.innerText="";
+  try{
+    await signInWithEmailAndPassword(auth,emailInput.value,passwordInput.value);
     showSuccess("تم تسجيل الدخول بنجاح");
-  } catch (error) {
+  }catch{
     showError("بيانات الدخول غير صحيحة");
   }
-});
+};
 
-forgotBtn.addEventListener("click", async () => {
-  const email = emailInput.value.trim();
-  messageDiv.innerText = "";
+forgotBtn.onclick = async () => {
+  const email=emailInput.value.trim();
+  messageDiv.innerText="";
 
-  if (!email) {
+  if(!email){
     showError("ادخل الإيميل أولاً");
     return;
   }
 
-  try {
-    await sendPasswordResetEmail(auth, email);
+  try{
+    await sendPasswordResetEmail(auth,email);
     showSuccess("تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك");
-  } catch (error) {
-    showError("تعذر إرسال الرابط. تأكد من صحة البريد.");
+  }catch{
+    showError("تعذر إرسال الرابط");
   }
-});
-
-});
+};
 </script>
 
 </body>
