@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>الصفحة الرئيسية</title>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "ضع apiKey هنا",
+  authDomain: "ضع authDomain هنا",
+  projectId: "ضع projectId هنا",
+  appId: "ضع appId هنا"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById("userEmail").innerText = user.email;
+  } else {
+    window.location.href = "index.html";
+  }
+});
+
+window.logout = function () {
+  signOut(auth).then(() => {
+    window.location.href = "index.html";
+  });
+};
+
+</script>
+</head>
+
+<body style="text-align:center; margin-top:100px; font-family:Arial">
+
+<h2>مرحباً بك 👋</h2>
+
+<p>الإيميل:</p>
+<h3 id="userEmail"></h3>
+
+<br>
+<button onclick="logout()">تسجيل خروج</button>
+
+</body>
+</html>
