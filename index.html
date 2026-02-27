@@ -1,35 +1,53 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>Login App</title>
+</head>
+<body>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
-    authDomain: "my-login-app-c657b.firebaseapp.com",
-    projectId: "my-login-app-c657b",
-    storageBucket: "my-login-app-c657b.firebasestorage.app",
-    messagingSenderId: "212822743589",
-    appId: "1:212822743589:web:b3417be9f21f7287c9fdcc",
-  };
+  <h2>إنشاء حساب</h2>
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  <button onclick="signUp()">Sign Up</button>
+  <button onclick="login()">Login</button>
 
-  window.signUp = function() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => alert("تم إنشاء الحساب 🔥"))
-      .catch(error => alert(error.message));
-  }
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
+      authDomain: "my-login-app-c657b.firebaseapp.com",
+      projectId: "my-login-app-c657b",
+      storageBucket: "my-login-app-c657b.firebasestorage.app",
+      messagingSenderId: "212822743589",
+      appId: "1:212822743589:web:b3417be9f21f7287c9fdcc"
+    };
 
-  window.login = function() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => alert("تم تسجيل الدخول 🔥"))
-      .catch(error => alert(error.message));
-  }
-</script>
+    window.signUp = function() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => alert("تم إنشاء الحساب 🔥"))
+        .catch(error => alert(error.message));
+    }
+
+    window.login = function() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => alert("تم تسجيل الدخول 🔥"))
+        .catch(error => alert(error.message));
+    }
+  </script>
+
+</body>
+</html>
