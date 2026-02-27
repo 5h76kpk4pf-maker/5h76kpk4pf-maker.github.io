@@ -1,87 +1,81 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Auth System</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام تسجيل</title>
 
 <style>
-  body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#667eea,#764ba2);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-  }
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
 
-  .card{
-    background:white;
-    padding:30px;
-    width:350px;
-    border-radius:15px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.2);
-    text-align:center;
-  }
+.card{
+  background:white;
+  width:350px;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+  text-align:center;
+}
 
-  h2{ margin-bottom:20px; }
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
 
-  input{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    border-radius:8px;
-    border:1px solid #ddd;
-    font-size:14px;
-  }
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:15px;
+}
 
-  button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:none;
-    border-radius:8px;
-    font-size:15px;
-    cursor:pointer;
-    transition:0.3s;
-  }
+.signup{background:#667eea;color:white;}
+.login{background:#764ba2;color:white;}
+.logout{background:#e74c3c;color:white;}
 
-  .signup{ background:#667eea; color:white; }
-  .login{ background:#764ba2; color:white; }
-  .logout{ background:#e74c3c; color:white; }
+.message{
+  margin-top:15px;
+  font-size:14px;
+}
 
-  button:hover{ opacity:0.9; }
-
-  .message{
-    margin-top:15px;
-    font-size:14px;
-  }
-
-  .hidden{ display:none; }
+.hidden{display:none;}
 </style>
 </head>
 <body>
 
 <div class="card">
 
-  <div id="authBox">
-    <h2>إنشاء حساب / تسجيل دخول</h2>
+<div id="authBox">
+<h2>إنشاء حساب / تسجيل دخول</h2>
 
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
+<input type="email" id="email" placeholder="البريد الإلكتروني">
+<input type="password" id="password" placeholder="كلمة المرور">
 
-    <button class="signup" id="signup">إنشاء حساب</button>
-    <button class="login" id="login">تسجيل دخول</button>
+<button class="signup" id="signup">إنشاء حساب</button>
+<button class="login" id="login">تسجيل دخول</button>
 
-    <p class="message" id="message"></p>
-  </div>
+<p class="message" id="message"></p>
+</div>
 
-  <div id="dashboard" class="hidden">
-    <h2>مرحباً 👋</h2>
-    <p id="userEmail"></p>
-    <button class="logout" id="logout">تسجيل خروج</button>
-  </div>
+<div id="dashboard" class="hidden">
+<h2>مرحباً 👋</h2>
+<p id="userEmail"></p>
+<button class="logout" id="logout">تسجيل خروج</button>
+</div>
 
 </div>
 
@@ -117,20 +111,37 @@ function showMessage(text,color="green"){
   message.innerText = text;
 }
 
-// تحقق من الإدخال
 function validate(email,password){
   if(!email.includes("@")){
-    showMessage("بريد إلكتروني غير صالح","red");
+    showMessage("البريد الإلكتروني غير صالح ❌","red");
     return false;
   }
   if(password.length < 6){
-    showMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل","red");
+    showMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل 🔐","red");
     return false;
   }
   return true;
 }
 
-// إنشاء حساب
+function translateError(error){
+  switch(error.code){
+    case "auth/weak-password":
+      return "كلمة المرور ضعيفة جداً";
+    case "auth/email-already-in-use":
+      return "هذا البريد مستخدم بالفعل 📧";
+    case "auth/invalid-email":
+      return "البريد الإلكتروني غير صالح ❌";
+    case "auth/user-not-found":
+      return "لا يوجد حساب بهذا البريد";
+    case "auth/wrong-password":
+      return "كلمة المرور غير صحيحة";
+    case "auth/invalid-credential":
+      return "بيانات الدخول غير صحيحة";
+    default:
+      return "حدث خطأ غير متوقع";
+  }
+}
+
 document.getElementById("signup").onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
@@ -141,11 +152,10 @@ document.getElementById("signup").onclick = async () => {
     await createUserWithEmailAndPassword(auth,email,password);
     showMessage("تم إنشاء الحساب بنجاح 🔥");
   }catch(error){
-    showMessage(error.message,"red");
+    showMessage(translateError(error),"red");
   }
 };
 
-// تسجيل دخول
 document.getElementById("login").onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
@@ -156,16 +166,14 @@ document.getElementById("login").onclick = async () => {
     await signInWithEmailAndPassword(auth,email,password);
     showMessage("تم تسجيل الدخول 🔥");
   }catch(error){
-    showMessage("بيانات غير صحيحة","red");
+    showMessage(translateError(error),"red");
   }
 };
 
-// تسجيل خروج
 document.getElementById("logout").onclick = async () => {
   await signOut(auth);
 };
 
-// حماية الصفحة
 onAuthStateChanged(auth, (user)=>{
   if(user){
     document.getElementById("authBox").classList.add("hidden");
