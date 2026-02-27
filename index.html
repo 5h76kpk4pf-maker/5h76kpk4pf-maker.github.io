@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول</title>
+</head>
+
+<body style="text-align:center; font-family:Arial; direction:rtl">
+
+<h2>تسجيل الدخول</h2>
+
+<input id="email" type="email" placeholder="الإيميل"><br><br>
+<input id="password" type="password" placeholder="كلمة المرور"><br><br>
+
+<button id="loginBtn">دخول</button>
+<button id="registerBtn">إنشاء حساب</button>
+<br><br>
+<button id="resetBtn">نسيت كلمة المرور؟</button>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
@@ -27,24 +47,27 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-window.login = async function () {
+document.getElementById("loginBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   await signInWithEmailAndPassword(auth, email, password);
   window.location.href = "dashboard.html";
-};
+});
 
-window.register = async function () {
+document.getElementById("registerBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   await createUserWithEmailAndPassword(auth, email, password);
   window.location.href = "dashboard.html";
-};
+});
 
-window.resetPassword = async function () {
+document.getElementById("resetBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   await sendPasswordResetEmail(auth, email);
   alert("تم إرسال رابط إعادة تعيين كلمة المرور");
-};
+});
 
 </script>
+
+</body>
+</html>
