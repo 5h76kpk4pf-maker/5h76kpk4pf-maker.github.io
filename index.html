@@ -3,176 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصتي الذكية | تسجيل الدخول</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>منصة الإبداع | دخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --bg: #0f172a;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
+            --main-color: #6c5ce7;
+            --accent-color: #00cec9;
+            --bg-dark: #0f0c29;
         }
 
         body {
-            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+            margin: 0;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             color: white;
             overflow: hidden;
         }
 
-        /* تأثيرات الخلفية المتحركة */
-        .circles {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-        }
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            background: var(--primary);
-            filter: blur(80px);
-            opacity: 0.2;
-        }
-
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 24px;
+        .container {
+            position: relative;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             text-align: center;
-            animation: fadeIn 0.8s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        h2 { margin-bottom: 25px; font-weight: 700; font-size: 1.6rem; letter-spacing: 1px; }
 
-        h2 { margin-bottom: 10px; font-weight: 700; font-size: 1.8rem; }
-        p { color: #94a3b8; margin-bottom: 30px; font-size: 0.9rem; }
-
-        .input-group { margin-bottom: 20px; text-align: right; }
-        label { display: block; margin-bottom: 8px; color: #cbd5e1; font-size: 0.85rem; }
-        
         input {
             width: 100%;
-            padding: 14px 16px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
             border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
             color: white;
             outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
             transition: 0.3s;
         }
 
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); }
+        input:focus { border-color: var(--accent-color); background: rgba(255, 255, 255, 0.1); }
+
+        .btns-container { margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
 
         .btn {
-            width: 100%;
-            padding: 14px;
+            padding: 15px;
             border: none;
             border-radius: 12px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 15px;
+            transition: 0.4s;
+            font-size: 1rem;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        .btn-login {
+            background: linear-gradient(45deg, var(--main-color), #a29bfe);
             color: white;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
         }
 
-        .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
-
-        .btn-outline {
+        .btn-signup {
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
         }
 
-        .btn-outline:hover { background: rgba(255, 255, 255, 0.05); }
+        .btn:active { transform: scale(0.95); }
 
-        #error-msg { color: #f87171; font-size: 0.8rem; margin-top: 10px; min-height: 20px; }
+        #status {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .error { background: rgba(255, 118, 117, 0.2); color: #ff7675; display: block !important; }
+        .success { background: rgba(85, 239, 196, 0.2); color: #55efc4; display: block !important; }
     </style>
 </head>
 <body>
 
-    <div class="circles">
-        <div class="circle" style="width: 300px; height: 300px; top: -50px; left: -50px;"></div>
-        <div class="circle" style="width: 250px; height: 250px; bottom: -50px; right: -50px; background: var(--secondary);"></div>
-    </div>
-
-    <div class="card">
-        <h2>أهلاً بك مجدداً</h2>
-        <p>قم بتسجيل الدخول للوصول إلى لوحة التحكم</p>
+    <div class="container">
+        <h2>تسجيل الدخول</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني">
+        <input type="password" id="password" placeholder="كلمة المرور">
         
-        <div class="input-group">
-            <label>البريد الإلكتروني</label>
-            <input type="email" id="email" placeholder="example@mail.com">
+        <div class="btns-container">
+            <button class="btn btn-login" onclick="authAction('login')">دخول فوري</button>
+            <button class="btn btn-signup" onclick="authAction('signup')">إنشاء حساب جديد</button>
         </div>
 
-        <div class="input-group">
-            <label>كلمة المرور</label>
-            <input type="password" id="password" placeholder="••••••••">
-        </div>
-
-        <button class="btn btn-primary" onclick="handleAuth('login')">تسجيل الدخول</button>
-        <button class="btn btn-outline" onclick="handleAuth('signup')">إنشاء حساب جديد</button>
-
-        <div id="error-msg"></div>
+        <div id="status"></div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // ضع إعداداتك هنا بدقة
+        // انتبه: استبدل القيم أدناه ببيانات مشروعك الحقيقية من إعدادات Firebase
         const firebaseConfig = {
-            apiKey: "ضع_مفتاحك_هنا",
+            apiKey: "AIzaSyB.........................", 
             authDomain: "5h76kpk4pf-maker.firebaseapp.com",
             projectId: "5h76kpk4pf-maker",
             storageBucket: "5h76kpk4pf-maker.appspot.com",
-            messagingSenderId: "XXXXXXXXXXXX",
-            appId: "XXXXXXXXXXXX"
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        window.handleAuth = async (type) => {
+        window.authAction = async (type) => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('error-msg');
-            
-            errorDiv.innerText = "جاري المعالجة...";
+            const status = document.getElementById('status');
+
+            if (!email || !password) {
+                status.className = 'error';
+                status.innerText = "يرجى ملء جميع الحقول";
+                return;
+            }
+
+            status.className = '';
+            status.innerText = "جاري العمل...";
+            status.style.display = "block";
 
             try {
-                if(type === 'login') {
+                if (type === 'login') {
                     await signInWithEmailAndPassword(auth, email, password);
-                    alert("تم الدخول بنجاح!");
+                    status.className = 'success';
+                    status.innerText = "تم تسجيل الدخول بنجاح! جاري التحويل...";
                 } else {
                     await createUserWithEmailAndPassword(auth, email, password);
-                    alert("تم إنشاء الحساب!");
+                    status.className = 'success';
+                    status.innerText = "تم إنشاء الحساب بنجاح!";
                 }
             } catch (error) {
-                errorDiv.innerText = "خطأ: " + error.message;
+                status.className = 'error';
+                // سيعرض لك الخطأ الحقيقي القادم من Firebase
+                status.innerText = "خطأ: " + error.message;
             }
-        }
+        };
     </script>
 </body>
 </html>
