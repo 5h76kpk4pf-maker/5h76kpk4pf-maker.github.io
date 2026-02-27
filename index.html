@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <title>تسجيل الدخول</title>
-</head>
-<body>
-
-<h2>تسجيل الدخول</h2>
-
-<input type="email" id="email" placeholder="البريد الإلكتروني"><br><br>
-<input type="password" id="password" placeholder="كلمة المرور"><br><br>
-
-<button id="register">إنشاء حساب</button>
-<button id="login">تسجيل دخول</button>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
@@ -30,7 +13,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
@@ -38,19 +20,11 @@ const registerBtn = document.getElementById("register");
 const loginBtn = document.getElementById("login");
 
 registerBtn.addEventListener("click", async () => {
-  const userCredential = await createUserWithEmailAndPassword(
+  await createUserWithEmailAndPassword(
     auth,
     emailInput.value,
     passwordInput.value
   );
-
-  const user = userCredential.user;
-
-  await setDoc(doc(db, "users", user.uid), {
-    email: user.email,
-    role: "user",
-    createdAt: new Date()
-  });
 
   window.location.href = "dashboard.html";
 });
@@ -65,6 +39,3 @@ loginBtn.addEventListener("click", async () => {
   window.location.href = "dashboard.html";
 });
 </script>
-
-</body>
-</html>
