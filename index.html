@@ -15,7 +15,6 @@ body{
   align-items:center;
   height:100vh;
 }
-
 .card{
   background:white;
   padding:30px;
@@ -25,56 +24,27 @@ body{
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
-
-h2{
-  margin-bottom:20px;
-}
-
 input{
   width:100%;
   padding:12px;
   margin:8px 0;
   border-radius:8px;
   border:1px solid #ccc;
-  font-size:15px;
 }
-
 button{
   width:100%;
   padding:12px;
   margin-top:10px;
   border:none;
   border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
   font-weight:bold;
-}
-
-#create{
-  background:#4CAF50;
-  color:white;
-}
-
-#login{
-  background:#2196F3;
-  color:white;
-}
-
-#message{
-  margin-top:15px;
-  font-weight:bold;
-}
-
-a{
-  display:block;
-  margin-top:12px;
-  font-size:14px;
-  color:#2196F3;
   cursor:pointer;
 }
+#create{background:#4CAF50;color:white;}
+#login{background:#2196F3;color:white;}
+#message{margin-top:15px;font-weight:bold;}
 </style>
 </head>
-
 <body>
 
 <div class="card">
@@ -86,8 +56,6 @@ a{
   <button id="create">إنشاء حساب</button>
   <button id="login">تسجيل دخول</button>
 
-  <a id="forgot">نسيت كلمة المرور؟</a>
-
   <div id="message"></div>
 </div>
 
@@ -97,7 +65,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -116,7 +85,6 @@ const email = document.getElementById("email");
 const password = document.getElementById("password");
 const createBtn = document.getElementById("create");
 const loginBtn = document.getElementById("login");
-const forgotBtn = document.getElementById("forgot");
 const message = document.getElementById("message");
 
 function showError(text){
@@ -131,46 +99,34 @@ function showSuccess(text){
 
 createBtn.onclick = async () => {
   message.innerText="";
-
   if(!email.value.endsWith("@gmail.com")){
     showError("يجب أن ينتهي البريد بـ @gmail.com");
     return;
   }
-
   if(password.value.length < 6){
-    showError("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
+    showError("كلمة المرور ضعيفة");
     return;
   }
-
   try{
     await createUserWithEmailAndPassword(auth,email.value,password.value);
     showSuccess("تم إنشاء الحساب بنجاح");
   }catch(error){
-    showError("البريد مستخدم من قبل");
+    showError(error.message);
   }
 };
 
 loginBtn.onclick = async () => {
   message.innerText="";
   try{
+
+    await setPersistence(auth, browserLocalPersistence);
+
     await signInWithEmailAndPassword(auth,email.value,password.value);
-    window.location.replace("dashboard.html");
-  }catch{
-    showError("بيانات الدخول غير صحيحة");
-  }
-};
 
-forgotBtn.onclick = async () => {
-  if(!email.value){
-    showError("أدخل البريد أولاً");
-    return;
-  }
+    window.location.href = "dashboard.html";
 
-  try{
-    await sendPasswordResetEmail(auth,email.value);
-    showSuccess("تم إرسال رابط إعادة تعيين كلمة المرور");
-  }catch{
-    showError("حدث خطأ");
+  }catch(error){
+    showError(error.message);
   }
 };
 </script>
