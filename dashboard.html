@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="htmlTag" lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,6 @@ body{
   color:white;
 }
 
-/* HEADER */
 .header{
   padding:20px;
 }
@@ -29,13 +28,24 @@ body{
   font-weight:600;
 }
 
-.settings{
-  font-size:14px;
-  color:#f0b90b;
-  cursor:pointer;
+.top-actions{
+  display:flex;
+  gap:15px;
+  align-items:center;
 }
 
-/* BALANCE */
+.lang-btn{
+  color:#f0b90b;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.settings{
+  color:#f0b90b;
+  cursor:pointer;
+  font-size:14px;
+}
+
 .balance-box{
   margin-top:30px;
 }
@@ -51,7 +61,6 @@ body{
   margin-top:8px;
 }
 
-/* ACTIONS */
 .actions{
   display:flex;
   gap:15px;
@@ -66,14 +75,12 @@ body{
   text-align:center;
   font-weight:600;
   cursor:pointer;
-  transition:0.2s;
 }
 
 .action:hover{
   background:#2b3139;
 }
 
-/* MENU */
 .menu{
   margin-top:30px;
 }
@@ -85,14 +92,12 @@ body{
   margin-bottom:12px;
   display:flex;
   justify-content:space-between;
-  cursor:pointer;
 }
 
 .menu-item:hover{
   background:#2b3139;
 }
 
-/* BOTTOM NAV */
 .bottom-nav{
   position:fixed;
   bottom:0;
@@ -115,13 +120,16 @@ body{
 }
 </style>
 </head>
+
 <body>
 
 <div class="header">
   <div class="top-bar">
-    <div class="username" id="username">User</div>
-    <div class="settings" onclick="window.location.href='settings.html'">
-      Settings
+    <div class="username">User</div>
+
+    <div class="top-actions">
+      <div class="lang-btn" onclick="toggleLanguage()" id="langBtn">AR</div>
+      <div class="settings">Settings</div>
     </div>
   </div>
 
@@ -159,24 +167,46 @@ body{
 let lang = localStorage.getItem("lang") || "en";
 
 function applyLanguage(){
-  const html = document.getElementById("htmlTag");
 
   if(lang === "ar"){
-    html.dir="rtl";
 
-    document.getElementById("balanceText").innerText="إجمالي الرصيد";
-    document.getElementById("depositText").innerText="إيداع";
-    document.getElementById("withdrawText").innerText="سحب";
-    document.getElementById("historyText").innerText="سجل المعاملات";
-    document.getElementById("securityText").innerText="مركز الأمان";
-    document.getElementById("homeText").innerText="الرئيسية";
-    document.getElementById("marketsText").innerText="الأسواق";
-    document.getElementById("tradeText").innerText="تداول";
-    document.getElementById("assetsText").innerText="الأصول";
+    document.documentElement.lang = "ar";
+    document.documentElement.dir = "rtl";
+
+    document.getElementById("balanceText").innerText = "إجمالي الرصيد";
+    document.getElementById("depositText").innerText = "إيداع";
+    document.getElementById("withdrawText").innerText = "سحب";
+    document.getElementById("historyText").innerText = "سجل المعاملات";
+    document.getElementById("securityText").innerText = "مركز الأمان";
+    document.getElementById("homeText").innerText = "الرئيسية";
+    document.getElementById("marketsText").innerText = "الأسواق";
+    document.getElementById("tradeText").innerText = "تداول";
+    document.getElementById("assetsText").innerText = "الأصول";
+    document.getElementById("langBtn").innerText = "EN";
 
   } else {
-    html.dir="ltr";
+
+    document.documentElement.lang = "en";
+    document.documentElement.dir = "ltr";
+
+    document.getElementById("balanceText").innerText = "Total Balance";
+    document.getElementById("depositText").innerText = "Deposit";
+    document.getElementById("withdrawText").innerText = "Withdraw";
+    document.getElementById("historyText").innerText = "Transaction History";
+    document.getElementById("securityText").innerText = "Security Center";
+    document.getElementById("homeText").innerText = "Home";
+    document.getElementById("marketsText").innerText = "Markets";
+    document.getElementById("tradeText").innerText = "Trade";
+    document.getElementById("assetsText").innerText = "Assets";
+    document.getElementById("langBtn").innerText = "AR";
+
   }
+}
+
+function toggleLanguage(){
+  lang = lang === "en" ? "ar" : "en";
+  localStorage.setItem("lang", lang);
+  applyLanguage();
 }
 
 applyLanguage();
