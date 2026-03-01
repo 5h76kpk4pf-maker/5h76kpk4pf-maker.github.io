@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html id="htmlTag" lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,6 @@ body{
   color:white;
 }
 
-/* ===== HEADER ===== */
 .header{
   padding:20px;
 }
@@ -48,7 +47,6 @@ body{
   opacity:1;
 }
 
-/* ===== BALANCE ===== */
 .balance-box{
   margin-top:25px;
 }
@@ -64,7 +62,6 @@ body{
   margin-top:6px;
 }
 
-/* ===== ACTION BUTTONS ===== */
 .actions{
   display:flex;
   margin-top:20px;
@@ -90,31 +87,6 @@ body{
   background:#2b3139;
 }
 
-/* ===== MENU LIST ===== */
-.menu{
-  margin-top:25px;
-}
-
-.menu-item{
-  background:#1e2329;
-  padding:18px;
-  border-radius:10px;
-  margin-bottom:12px;
-  display:flex;
-  justify-content:space-between;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.menu-item:hover{
-  background:#2b3139;
-}
-
-.arrow{
-  color:#848e9c;
-}
-
-/* ===== BOTTOM NAV ===== */
 .bottom-nav{
   position:fixed;
   bottom:0;
@@ -147,41 +119,27 @@ body{
       <span class="vip">VIP0</span>
     </div>
 
-    <div class="settings-btn" onclick="window.location.href='settings.html'">
-      Settings
+    <div class="settings-btn" onclick="toggleLanguage()">
+      <span id="langText">AR</span>
     </div>
   </div>
 
   <div class="balance-box">
-    <div class="balance-title">Total Balance</div>
+    <div class="balance-title" id="balanceText">Total Balance</div>
     <div class="balance">USDT <span id="balance">0.00</span></div>
   </div>
 
   <div class="actions">
-    <div class="action-btn">Deposit</div>
-    <div class="action-btn">Withdraw</div>
-  </div>
-
-  <div class="menu">
-    <div class="menu-item">
-      Account Details <span class="arrow">›</span>
-    </div>
-
-    <div class="menu-item">
-      Transaction History <span class="arrow">›</span>
-    </div>
-
-    <div class="menu-item">
-      Security Center <span class="arrow">›</span>
-    </div>
+    <div class="action-btn" id="depositText">Deposit</div>
+    <div class="action-btn" id="withdrawText">Withdraw</div>
   </div>
 </div>
 
 <div class="bottom-nav">
-  <div class="nav-item active">Home</div>
-  <div class="nav-item">Markets</div>
-  <div class="nav-item">Trade</div>
-  <div class="nav-item">Assets</div>
+  <div class="nav-item active" id="homeText">Home</div>
+  <div class="nav-item" id="marketsText">Markets</div>
+  <div class="nav-item" id="tradeText">Trade</div>
+  <div class="nav-item" id="assetsText">Assets</div>
 </div>
 
 <script type="module">
@@ -208,6 +166,53 @@ onAuthStateChanged(auth, (user) => {
     window.location.href="index.html";
   }
 });
+</script>
+
+<script>
+let lang = localStorage.getItem("lang") || "en";
+
+function applyLanguage(){
+
+  const html = document.getElementById("htmlTag");
+
+  if(lang === "ar"){
+
+    html.dir = "rtl";
+    html.lang = "ar";
+
+    document.getElementById("balanceText").innerText = "إجمالي الرصيد";
+    document.getElementById("depositText").innerText = "إيداع";
+    document.getElementById("withdrawText").innerText = "سحب";
+    document.getElementById("homeText").innerText = "الرئيسية";
+    document.getElementById("marketsText").innerText = "الأسواق";
+    document.getElementById("tradeText").innerText = "تداول";
+    document.getElementById("assetsText").innerText = "الأصول";
+    document.getElementById("langText").innerText = "EN";
+
+  } else {
+
+    html.dir = "ltr";
+    html.lang = "en";
+
+    document.getElementById("balanceText").innerText = "Total Balance";
+    document.getElementById("depositText").innerText = "Deposit";
+    document.getElementById("withdrawText").innerText = "Withdraw";
+    document.getElementById("homeText").innerText = "Home";
+    document.getElementById("marketsText").innerText = "Markets";
+    document.getElementById("tradeText").innerText = "Trade";
+    document.getElementById("assetsText").innerText = "Assets";
+    document.getElementById("langText").innerText = "AR";
+
+  }
+}
+
+function toggleLanguage(){
+  lang = lang === "en" ? "ar" : "en";
+  localStorage.setItem("lang", lang);
+  applyLanguage();
+}
+
+applyLanguage();
 </script>
 
 </body>
