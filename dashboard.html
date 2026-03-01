@@ -3,85 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة التحكم</title>
+<title>حسابي</title>
 
 <style>
 body{
-  font-family: Arial;
-  background:#f2f2f2;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
   margin:0;
+  font-family:Arial;
+  background:#f2f2f2;
 }
 
-.box{
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  width:90%;
-  max-width:400px;
-  text-align:center;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-button{
-  margin-top:15px;
-  padding:10px 20px;
-  border:none;
-  border-radius:6px;
-  background:#e53935;
+/* الهيدر */
+.header{
+  background:linear-gradient(135deg,#f6a623,#f76b1c);
+  padding:20px;
   color:white;
-  cursor:pointer;
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+}
+
+.profile img{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-left:15px;
+  border:3px solid white;
+}
+
+.balance{
+  margin-top:15px;
+  font-size:22px;
   font-weight:bold;
+}
+
+/* الأزرار */
+.actions{
+  display:flex;
+  justify-content:space-around;
+  margin-top:15px;
+}
+
+.action-btn{
+  background:white;
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* القائمة */
+.section{
+  background:white;
+  margin:15px;
+  padding:15px;
+  border-radius:12px;
+  display:flex;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+/* منيو سفلي */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  box-shadow:0 -2px 5px rgba(0,0,0,0.1);
+}
+
+.bottom-nav div{
+  text-align:center;
+  font-size:14px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="box">
-  <h2>لوحة التحكم </h2>
-  <p id="userEmail">جاري التحميل...</p>
-  <button id="logout">تسجيل خروج</button>
+<div class="header">
+  <div class="profile">
+    <img id="userPhoto" src="">
+    <div>
+      <div id="userName">الاسم</div>
+      <div class="balance">الرصيد: <span id="userBalance">0</span> USDT</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="action-btn">إيداع</div>
+    <div class="action-btn">سحب</div>
+  </div>
+</div>
+
+<div class="section">معلومات شخصية <span>></span></div>
+<div class="section">سجل الإيداع <span>></span></div>
+<div class="section">تفاصيل الانسحاب <span>></span></div>
+<div class="section">إعدادات الحساب <span>></span></div>
+
+<div class="bottom-nav">
+  <div>الرئيسية</div>
+  <div>السجل</div>
+  <div>أنا</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { 
-  getAuth, 
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
-  authDomain: "my-login-app-c657b.firebaseapp.com",
-  projectId: "my-login-app-c657b",
-  storageBucket: "my-login-app-c657b.firebasestorage.app",
-  messagingSenderId: "212822743589",
-  appId: "1:212822743589:web:b9dbdbcf82a9c05fc9fdcc"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-const userEmail = document.getElementById("userEmail");
-const logoutBtn = document.getElementById("logout");
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    userEmail.innerText = "أهلاً: " + user.email;
-  } else {
-    window.location.href = "index.html";
+    if(docSnap.exists()){
+      const data = docSnap.data();
+      document.getElementById("userName").innerText = data.name || user.email;
+      document.getElementById("userPhoto").src = data.photoURL;
+      document.getElementById("userBalance").innerText = data.balance || 0;
+    }
+  }else{
+    window.location.href="index.html";
   }
 });
-
-logoutBtn.onclick = async () => {
-  await signOut(auth);
-  window.location.href = "index.html";
-};
 </script>
 
 </body>
