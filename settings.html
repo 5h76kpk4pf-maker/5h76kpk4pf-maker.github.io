@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html id="htmlTag">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,134 +8,68 @@
 <style>
 body{
   margin:0;
-  font-family: 'Segoe UI', sans-serif;
-  background:#f5f6fa;
-}
-
-/* Header */
-.header{
-  background:linear-gradient(135deg,#7b1e1e,#3a0d0d);
+  font-family:Arial;
+  background:#0b0e11;
   color:white;
-  padding:25px 20px;
-  border-bottom-left-radius:25px;
-  border-bottom-right-radius:25px;
+  padding:20px;
 }
 
-.header h2{
-  margin:0;
-  font-weight:500;
+.title{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:25px;
 }
 
-/* Card */
 .card{
-  background:white;
-  margin:20px;
-  border-radius:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.05);
-  overflow:hidden;
-}
-
-.item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:18px 20px;
-  border-bottom:1px solid #eee;
+  background:#1e2329;
+  padding:18px;
+  border-radius:10px;
+  margin-bottom:15px;
   cursor:pointer;
-  font-size:15px;
-  transition:0.2s;
 }
 
-.item:last-child{
-  border-bottom:none;
-}
-
-.item:hover{
-  background:#f8f8f8;
-}
-
-.arrow{
-  font-size:18px;
-  color:#999;
-}
-
-/* Button */
-.logout-btn{
-  background:#b22222;
-  color:white;
-  text-align:center;
-  padding:16px;
-  margin:30px 20px;
-  border-radius:14px;
-  font-weight:500;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.logout-btn:hover{
-  background:#8b1a1a;
+.card:hover{
+  background:#2b3139;
 }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h2>Settings</h2>
+<div class="title" id="settingsTitle">Settings</div>
+
+<div class="card" onclick="toggleLanguage()" id="langCard">
+  Change Language
 </div>
 
-<div class="card">
-  <div class="item" onclick="goTelegram()">
-    Contact Our Team
-    <span class="arrow">›</span>
-  </div>
-
-  <div class="item" onclick="toggleLanguage()">
-    Language
-    <span id="currentLang" class="arrow">EN</span>
-  </div>
+<div class="card" onclick="openInstagram()" id="instaCard">
+  Contact Us via Instagram
 </div>
 
-<div class="logout-btn" id="logout">
-  Log Out
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCeUwV0zghn9GkfJWqFWS-6L2NmLxyM7NE",
-  authDomain: "my-login-app-c657b.firebaseapp.com",
-  projectId: "my-login-app-c657b",
-  storageBucket: "my-login-app-c657b.firebasestorage.app",
-  messagingSenderId: "212822743589",
-  appId: "1:212822743589:web:b9dbdbcf82a9c05fc9fdcc"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-/* Telegram */
-window.goTelegram = function(){
-  window.open("https://t.me/YOUR_USERNAME","_blank");
-}
-
-/* Language Toggle */
+<script>
 let lang = localStorage.getItem("lang") || "en";
 
-document.getElementById("currentLang").innerText = lang.toUpperCase();
+function applyLang(){
+  const html=document.getElementById("htmlTag");
 
-window.toggleLanguage = function(){
-  lang = lang === "en" ? "ar" : "en";
-  localStorage.setItem("lang", lang);
-  document.getElementById("currentLang").innerText = lang.toUpperCase();
+  if(lang==="ar"){
+    html.dir="rtl";
+    document.getElementById("settingsTitle").innerText="الإعدادات";
+    document.getElementById("langCard").innerText="تغيير اللغة";
+    document.getElementById("instaCard").innerText="تواصل معنا عبر إنستغرام";
+  }
 }
 
-/* Logout */
-document.getElementById("logout").onclick = async ()=>{
-  await signOut(auth);
-  window.location.href="index.html";
-};
+function toggleLanguage(){
+  lang = lang === "en" ? "ar" : "en";
+  localStorage.setItem("lang",lang);
+  location.reload();
+}
+
+function openInstagram(){
+  window.open("https://instagram.com/YOUR_USERNAME","_blank");
+}
+
+applyLang();
 </script>
 
 </body>
